@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<!-- Назва сторінки: назва вибраного фрукта або заголовок вибору -->
+<title>{{ fruit.name if fruit else 'Вибір фруктів' }}</title>
+<style>
+  /* Стиль тіла сторінки з приємним градієнтом і центруванням */
+  body {
+    font-family: Arial, sans-serif;       /* Шрифт тексту */
+    text-align: center;                   /* Центруємо весь текст */
+    padding: 30px;                       /* Відступи навколо */
+    background: linear-gradient(135deg, #ffecd2, #fcb69f); /* Градієнтний фон */
+    margin: 0;                          /* Прибираємо стандартні відступи */
+    min-height: 100vh;                  /* Мінімальна висота - весь екран */
+  }
+  /* Кнопки вибору фруктів */
+  button {
+    padding: 15px 30px;                 /* Внутрішні відступи */
+    margin: 8px;                       /* Відстань між кнопками */
+    border: none;                     /* Без рамки */
+    border-radius: 12px;               /* Закруглені краї */
+    color: white;                     /* Білий колір тексту */
+    font-weight: 700;                 /* Жирний текст */
+    cursor: pointer;                  /* Курсор у вигляді руки */
+    background-color: gray;           /* Стандартний колір кнопки */
+    transition: transform 0.3s;       /* Плавна анімація при наведенні */
+  }
+  /* Збільшення кнопки при наведенні */
+  button:hover {
+    transform: scale(1.1);
+  }
+  /* Кольори кнопок відповідають фруктам зі списку (передає Flask) */
+  {% for f in fruits %}
+  button[value="{{ f.name }}"] {
+    background-color: {{ f.color }};
+  }
+  {% endfor %}
+  /* Стиль блоку з інформацією про вибраний фрукт */
+  .detail {
+    margin: 40px auto;                 /* Відступ зверху і центрування */
+    padding: 30px;                    /* Відступ всередині блоку */
+    background-color: {{ fruit.color if fruit else 'rgba(255,255,255,0.85)' }}; /* Колір фону блоку – колір фрукта або прозорий білий */
+    border-radius: 20px;              /* Закруглені краї */
+    width: 320px;                    /* Фіксована ширина */
+    color: white;                    /* Білий текст для контрасту */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* Тінь для об'єму */
+  }
+  /* Стиль посилання “назад” */
+  a {
+    display: inline-block;            /* Щоб можна було задати відступ */
+    margin-top: 25px;                 /* Відступ зверху */
+    color: #444;                     /* Темно-сірий колір */
+    text-decoration: none;            /* Без підкреслення */
+    font-weight: 700;                /* Жирний текст */
+  }
+  /* Зміна кольору посилання при наведенні */
+  a:hover {
+    color: #111;
+  }
+</style>
+</head>
+<body>
+
+{% if fruit %}
+  <!-- Якщо фрукт вибрано, показуємо інформацію -->
+  <div class="detail">
+    <h1>{{ fruit.name }}</h1>          <!-- Назва фрукту -->
+    <p>{{ fruit.description }}</p>     <!-- Опис фрукту -->
+  </div>
+  <!-- Посилання для повернення до вибору фруктів -->
+  <a href="/">← Назад</a>
+{% else %}
+  <!-- Якщо фрукт не вибрано, показуємо кнопки вибору -->
+  <h1>Оберіть фрукт</h1>
+  <form method="POST">
+    {% for f in fruits %}
+      <!-- Кнопка з назвою і кольором фрукту -->
+      <button type="submit" name="fruit_name" value="{{ f.name }}">{{ f.name }}</button>
+    {% endfor %}
+  </form>
+{% endif %}
+
+</body>
+</html>
